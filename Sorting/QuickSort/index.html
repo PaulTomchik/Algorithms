@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+<body>
+    <div id="sidebar">
+      <div id="title_area">
+        <h1 id="algorithm_name">
+          Quicksort
+        </h1>
+      </div><!-- END title_area -->
+
+      <div id="controls_area">
+        <p>
+        Input the array here:
+        <input type="text" id="array_input_field" onkeyup="QsortViz.modifyArray()">
+          <div id="buttons_bar">
+            <button type="button" id="reset_button" onclick="QsortViz.reset()">Reset</button>
+            <button type="button" id="sort_button" onclick="QsortViz.sortArray()">Sort</button>
+          </div><!-- END buttons_bar -->
+        </p>
+      </div><!-- END controls_area -->
+
+    </div><!-- END sidebar -->
+
+
+    <div id="visualization_div">
+        <svg id="visualization_svg" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <g id="array_display"></g>
+          <g id="work_display"></g>
+        </svg>
+    </div>
+
+  </div><!-- END page -->
+
+<!--<script src="js/d3.js" charset="utf-8"></script>-->
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="js/Quicksort.js"></script>
+<script src="js/QuicksortViz.js"></script>
+
+<script>
+  document.getElementById("array_input_field").focus();
+</script>

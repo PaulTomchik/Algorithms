@@ -1,0 +1,41 @@
+html {
+  background-color: black ;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background-color: #010501  ;
+  height: 100%;
+  width: 98%;
+  color: green;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#sidebar {
+  position: relative;
+  width: 18%;
+  height: 100%;
+  float: left;
+  border-right: solid 2px green;
+}
+
+#visualization_div {
+  position: relative;
+  width: 80%;
+  height: 100%;
+  float: right;
+}
+
+#buttons_bar {
+  clear: both;
+}
+
+#buttons_bar button {
+  float: left;
+}
+
+#algorithm_name {
+  color: #ccff00; 
+}
