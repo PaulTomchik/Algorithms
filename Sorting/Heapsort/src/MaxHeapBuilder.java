@@ -3,6 +3,10 @@ import java.util.Comparator;
 public class MaxHeapBuilder {
 
 
+    public static <T extends Comparable<T>> void toMaxHeap(T arr[], int heapSize) {
+      toMaxHeap(arr, heapSize, T::compareTo);
+    }
+
     public static <T> void toMaxHeap (T arr[], int heapSize, Comparator<T> comparator) {
         for (int i = (heapSize/2)-1; i >= 0; --i) {
             fixBrokenHeap(arr, i, heapSize, comparator);
