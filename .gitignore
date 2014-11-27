@@ -3,3 +3,5 @@ valgrind_suppressions
 .idea/
 *.iml
 out/
+*.class
+*.so
