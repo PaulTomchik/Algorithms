@@ -11,8 +11,5 @@ compile_native:
 clean:
 	rm -f *.o *.class RadixSorter.h *.so
 
-clobber: clean
-	rm rsort
-
 runit:
 	java -Xmx1024M RadixSortTest
