@@ -26,6 +26,12 @@
 
 radixsort:
 
+  cmp   r0, #0
+  bxeq  lr
+
+  cmp   r1, #2
+  bxlt  lr
+
  // SETUP
   push  {r4, r5, r6, r7, r8, r9, r10, r11, r12, lr}
   mov   r4, r0                  // Pointer to the input array
