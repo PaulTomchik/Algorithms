@@ -1,3 +1,10 @@
+/*
+ *  This code implements quicksort using a functional programming paradigm.
+ *  Control is passed between the sorting and visualization code.
+ *  Stack height is minimized via a trampoline.
+ */
+
+
 var Quicksorter =  Object.create(null);
 
 Quicksorter.sort = function(theArray, randomize, threaded, visualizer, onHALT) {
@@ -5,6 +12,7 @@ Quicksorter.sort = function(theArray, randomize, threaded, visualizer, onHALT) {
   if (!visualizer) visualizer = function(){ setTimeout(arguments[arguments.length-1], 1); };
   if (!onHALT) onHALT = function noOp() {};
 
+  /* Keeps the stack depth minimal. */ 
   function trampoline(fn) { 
     while (fn = fn());
   };

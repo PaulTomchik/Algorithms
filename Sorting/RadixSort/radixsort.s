@@ -7,6 +7,10 @@
   .func   radixsort
 
 /*********************************************************
+* RadixSort implementation.
+*
+* ASSUMES: Non-negative integers of size 4bytes.
+*          Large number of elements in the array.
 *
 * parameters:
 *   r0 = pointer the array of integers
@@ -72,11 +76,11 @@ radixsort:
   orr   r9, r9, #0xFF00
 
   // Counting sort first pass initialization.
-  mov   r11, r4                  // r11 :=
+  mov   r11, r4                  // r11 := the input array to radix sort.
   mov   r12, r5
   mov   r3, #0
  
- tallyValueCounts:
+ countingSort:
   mov   r10, r11
   add   r2, r10, r7              // r2 <- end of the input array
  // Tally number of occurances of each digit.
@@ -126,7 +130,7 @@ radixsort:
   mov   r11, r5                 // Input array to counting sort now last pass' output
   mov   r12, r4                 // Output array now radix sort's input array/
   lsl   r9, r9, #16             // Leftshift the mask.
-  b     tallyValueCounts 
+  b     countingSort 
 
  // TEAR DOWN
  radixsortDONE:

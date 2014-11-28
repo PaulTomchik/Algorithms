@@ -86,6 +86,8 @@ static void merge (char *p,
   k = p;
 
   for (; k < r; k += elemSize) {
+
+    /* Only left side has remaining elems. Flush. */
     if ((i-left) == (q-p)) {
       while(k < r) {
         memcpy(k, j, elemSize);
@@ -95,6 +97,7 @@ static void merge (char *p,
       break;
     }
 
+    /* Only right side has remaining elems. Flush. */
     if ((j-right) == (r-q)) {
       while(k < r) {
         memcpy(k, i, elemSize);

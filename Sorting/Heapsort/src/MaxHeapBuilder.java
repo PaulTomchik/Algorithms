@@ -40,7 +40,8 @@ public class MaxHeapBuilder {
                 array[index] = array[largest];
                 array[largest] = temp;
                 index = largest;
-            } else break;
+            } 
+            else break;
         }
     }
 }

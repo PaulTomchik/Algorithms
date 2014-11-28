@@ -4,7 +4,6 @@ public class Heapsort {
 
     public static <T extends Comparable<T>> void sort (T array[]) {
         sort(array, T::compareTo);
-
     }
 
     public static <T> void sort (T array[], Comparator<T> comparator) {

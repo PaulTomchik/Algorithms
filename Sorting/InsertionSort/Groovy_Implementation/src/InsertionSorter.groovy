@@ -24,7 +24,7 @@ class InsertionSorter {
     public static def sort(def arr) {
         def i, key;
 
-        for (j in 1..(arr.size() - 1)) {
+        for ( j in 1..(arr.size() - 1) ) {
             key = arr[j]
             i = j - 1
             while ((i >= 0) && (arr[i] > key)) {
