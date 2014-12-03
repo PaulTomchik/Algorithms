@@ -5,3 +5,5 @@ valgrind_suppressions
 out/
 *.class
 *.so
+test
+output.txt
