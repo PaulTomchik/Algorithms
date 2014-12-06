@@ -1,3 +1,5 @@
+/* Prime numbers taken from http://primes.utm.edu/lists/small/10000.txt */
+
 # ifndef PRIMES_H
 # define PRIMES_H 1
 

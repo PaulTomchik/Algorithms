@@ -12,13 +12,14 @@
   } while(0)
 
 
-long simpleDivisionMethodHash (long k, long m) {
+long simpleDivisionMethodHash (void *key, long m) {
+  long k = *((long*)key);
   NONNEG_CHECK(k);
   return k % m;
 }
 
-
-long simpleMultiplicationMethodHash (long k, long m) {
+long simpleMultiplicationMethodHash (void *key, long m) {
+  long k = *((long*)key);
   double temp = k * 0.6180339887;
 
   NONNEG_CHECK(k);
@@ -26,18 +27,37 @@ long simpleMultiplicationMethodHash (long k, long m) {
   return (long) (m * temp); 
 }
 
-
 /* clrs 11.3-2 */
-long stringHash (char string[], long m) {
+long bigEndianStringHash (void *key, long m) {
+  char *k = (char*)key;
   int i, len;
   long modSum, radixMod;
   
-  if((string == NULL) || !(len = strlen(string))) return 0;
+  if((k == NULL) || !(len = strlen(k))) return 0;
 
   modSum = 0;
   radixMod = 1;
   for (i = len-1; i >= 0; --i) {
-    modSum += (radixMod * string[i]);
+    modSum += (radixMod * k[i]);
+    modSum %= m;
+    radixMod = (radixMod << 7) % m;
+  }
+
+  return modSum;
+}
+
+
+long littleEndianStringHash (void *key, long m) {
+  char *k = (char*)key;
+  int i, len;
+  long modSum, radixMod;
+  
+  if((k == NULL) || !(len = strlen(k))) return 0;
+
+  modSum = 0;
+  radixMod = 1;
+  for (i = 0; i < len; --i) {
+    modSum += (radixMod * k[i]);
     modSum %= m;
     radixMod = (radixMod << 7) % m;
   }

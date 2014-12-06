@@ -1,10 +1,13 @@
 # ifndef HASHFUNCTIONS_H
 # define HASHFUNCTIONS_H 1
 
-long simpleDivisionMethodHash(long k, long m);
+typedef long (*HashFunction)(void *key, long m);
 
-long simpleMultiplicationMethodHash(long k, long m);
+long simpleDivisionMethodHash (void *key, long m);
 
-long stringHash (char string[], long m);
+long simpleMultiplicationMethodHash(void *key, long m);
+
+long bigEndianStringHash (void *key, long m);
+long littleEndianStringHash (void *key, long m);
 
 # endif
