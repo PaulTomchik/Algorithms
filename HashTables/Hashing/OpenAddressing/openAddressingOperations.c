@@ -9,6 +9,8 @@ long openAddressTable_Insert (OpenAddressTable *oaTable, void *elem) {
   long h, i, k, slotKey;
   char *slot;
 
+  /*printf("openAddressTable_Insert(%d)\n", *(int*)elem);*/
+
   /* Put the elem key into a long variable. */
   k = keyCopy((char*)elem + oaTable->keyOffset, oaTable->keySize);
 
@@ -19,6 +21,8 @@ long openAddressTable_Insert (OpenAddressTable *oaTable, void *elem) {
     slot = (char*)(oaTable->table) + (oaTable->elemSize * h);
 
     slotKey = keyCopy(slot + oaTable->keyOffset, oaTable->keySize);
+
+    /*printf("\th = %ld, slotKey = %ld\n", h, slotKey);*/
 
     if ((slotKey == oaTable->emptyFlag) || (slotKey == oaTable->deletedFlag)) {
       memcpy(slot, elem, oaTable->elemSize);
@@ -64,26 +68,32 @@ void openAddressTable_Delete (OpenAddressTable *oaTable, void *elem) {
   if(slotNum != NOT_FOUND) {
     slot = (char*)(oaTable->table) + (slotNum * oaTable->elemSize);
     memcpy(slot + keyOffset, &(oaTable->deletedFlag), oaTable->keySize);
-  }
+  } 
 }
 
 
 /* Endian independent copying of key of size lte sizeof(long) into a long. */
 /* http://www.ibm.com/developerworks/aix/library/au-endianc/ */
+/* FIXME: Doesn't handle negative values. */
 long keyCopy (void *key, int keySize) {
 
   long keyCopy = 0L;
-  char *kc = (char*)&keyCopy;
-  char *k  = (char*)key;
+  signed char *kc = (signed char*)&keyCopy;
+  signed char *k  = (signed char*)key;
   int i = 1;
   int offset;
 
-  offset = 0;
   if (*((char*)&i)) { // Big-Endian System
     for(i=0; i < keySize; ++i) {
-      kc[i] = k[i];
+      kc[i] |= k[i];
+    }
+    if (k[i-1] < 0) {
+      for (; i < sizeof(long); ++i) {
+        kc[i] |= -1;
+      }
     }
   } else {
+    /* FIXME: Broken!!! */
     while (keySize--) {
       offset = sizeof(long) - keySize;
       printf("--> %d\n", offset);
