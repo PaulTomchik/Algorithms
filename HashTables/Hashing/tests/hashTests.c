@@ -11,13 +11,13 @@ void testSimpleDivisionIntegerHashing ();
 void testSimpleMultiplicationIntegerHashing ();
 void testStringHashing ();
 
-static void intKeyTester(HashFunction hfunc, double loadFactor);
-static void runIntKeyTest (int array[], int sz, double loadFactor, HashFunction hfunc);
-static void fillIntKeyTable (int array[], int sz, double loadFactor, HashFunction hfunc);
+static void intKeyTester(NumericHashFunction hfunc, double loadFactor);
+static void runIntKeyTest (int array[], int sz, double loadFactor, NumericHashFunction hfunc);
+static void fillIntKeyTable (int array[], int sz, double loadFactor, NumericHashFunction hfunc);
 
-static void stringHashTester(HashFunction hfunc, double loadFactor);
-static void runStringKeyTest (int array[], int sz, double loadFactor, HashFunction hfunc);
-static void fillStringKeyTable (int array[], int sz, double loadFactor, HashFunction hfunc);
+static void stringHashTester(StringHashFunction hfunc, double loadFactor);
+static void runStringKeyTest (int array[], int sz, double loadFactor, StringHashFunction hfunc);
+static void fillStringKeyTable (int array[], int sz, double loadFactor, StringHashFunction hfunc);
 
 static int getCollisionCount(int array[], int sz);
 
@@ -82,7 +82,7 @@ void testStringHashing () {
 }
 
 
-static void intKeyTester(HashFunction hfunc, double loadFactor) {
+static void intKeyTester(NumericHashFunction hfunc, double loadFactor) {
 
   int arr[MAX_M];
   int sz;
@@ -104,7 +104,7 @@ static void intKeyTester(HashFunction hfunc, double loadFactor) {
   }
 }
 
-static void stringHashTester(HashFunction hfunc, double loadFactor) {
+static void stringHashTester(StringHashFunction hfunc, double loadFactor) {
   int arr[MAX_M];
   int sz;
 
@@ -126,7 +126,7 @@ static void stringHashTester(HashFunction hfunc, double loadFactor) {
   }
 }
 
-static void runIntKeyTest(int array[], int sz, double loadFactor, HashFunction hfunc) {
+static void runIntKeyTest(int array[], int sz, double loadFactor, NumericHashFunction hfunc) {
   double collisionPercentage;
 
   memset(array, 0, sz * sizeof(int));
@@ -138,16 +138,15 @@ static void runIntKeyTest(int array[], int sz, double loadFactor, HashFunction h
 }
 
 
-static void fillIntKeyTable(int array[], int sz, double loadFactor, HashFunction hfunc) {
-  int i, key;
+static void fillIntKeyTable(int array[], int sz, double loadFactor, NumericHashFunction hfunc) {
+  int i;
 
   for (i=1; i <= (int)(sz * loadFactor); ++i) {
-    key = INT_MAX/i;
-    array[hfunc(&key, sz)] += 1;
+    array[hfunc(INT_MAX/i, sz)] += 1;
   }       
 }
 
-static void runStringKeyTest(int array[], int sz, double loadFactor, HashFunction hfunc) {
+static void runStringKeyTest(int array[], int sz, double loadFactor, StringHashFunction hfunc) {
   double collisionPercentage;
 
   memset(array, 0, sz * sizeof(int));
@@ -159,7 +158,7 @@ static void runStringKeyTest(int array[], int sz, double loadFactor, HashFunctio
 }
 
 
-static void fillStringKeyTable(int array[], int sz, double loadFactor, HashFunction hfunc) {
+static void fillStringKeyTable(int array[], int sz, double loadFactor, StringHashFunction hfunc) {
   int i, r;
   char string[101];
 
@@ -188,5 +187,3 @@ static int getCollisionCount(int array[], int sz) {
 
   return collisionCount;
 }
-
-
