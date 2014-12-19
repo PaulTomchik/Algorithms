@@ -7,12 +7,12 @@ var QsortViz = (function () {
   function noOp (){};
 
   // Static DOM elements
-  var vizDiv        = document.getElementById("visualization_div");
-      vizArea       = document.getElementById("visualization_svg");
+  var vizDiv        = document.getElementById("visualization_div"),
+      vizArea       = document.getElementById("visualization_svg"),
       arrayDisplay  = d3.select("#array_display"),
       workDisplay   = d3.select("#work_display"),
       inputField    = document.getElementById("array_input_field"),
-      sortButton    = document.getElementById("sort_button");
+      sortButton    = document.getElementById("sort_button"),
       resetButton   = document.getElementById("reset_button");
 
   // Formatting and styling
@@ -70,7 +70,9 @@ var QsortViz = (function () {
     };
 
     function getMaxDataTextWidth() {
-      var maxWidth  = 0;
+      var maxWidth  = 0,
+          temp;
+
       if(arrayVizualization.arrData) arrayVizualization.arrData.each(function() { 
         if ((temp = this.getBBox().width) > maxWidth) { maxWidth = temp; }
       });
@@ -79,9 +81,10 @@ var QsortViz = (function () {
 
     function setVizScalingFactorAndPadding(arrElemWidth) {
       var unscaledWidth = (arrElemWidth + 2*arrAddrSidePadding) * theArray.length,
-          vizAreaWidth  = document.getElementById("visualization_svg").offsetWidth;
+          vizAreaWidth  = vizArea.offsetWidth || vizDiv.offsetWidth;
 
       scalingFactor = (vizAreaWidth / unscaledWidth < 5) ? vizAreaWidth / unscaledWidth : 5;
+
       arrLeftPadding = (scalingFactor > 1) ? ( vizAreaWidth - (unscaledWidth * scalingFactor)) /2 : 0;
     };
 
@@ -248,7 +251,8 @@ var QsortViz = (function () {
 
   var arrayVizualization = (function() {
     
-    var that = Object.create(arrayVizPrototype);
+    var that = Object.create(arrayVizPrototype),
+        key;
 
     function resetElems() { that.arrElems = that.arrAddrs = that.arrData  = null; };
 

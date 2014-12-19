@@ -1,6 +1,8 @@
 # include <stdlib.h>
 # include <stdio.h>
+# include <limits.h>
 # include <string.h>
+# include <time.h>
 # include <math.h> 
 # include "hashFunctions.h"
 
@@ -37,11 +39,11 @@ long multiplicationMethodHash_linearProbe (long key, long m, long i) {
 
 
 long divisionMethodHash_quadraticProbe (long key, long m, long i) {
-  return (simpleDivisionMethodHash(key, m) + i + (i*i)/2) % m;
+  return (simpleDivisionMethodHash(key, m) + (int)(i/(double)2 + (i*i)/(double)2)) % m;
 }
 
 long multiplicationMethodHash_quadraticProbe (long key, long m, long i) {
-  return (simpleMultiplicationMethodHash(key, m)  + i + (i*i)/2) % m;
+  return (simpleMultiplicationMethodHash(key, m)  + (int)(i/(double)2 + (i*i)/(double)2)) % m;
 }
 
 
@@ -82,4 +84,21 @@ long littleEndianStringHash (const char key[], long m) {
   }
 
   return modSum;
+}
+
+static long UHFunction (long key, long p, long m) {
+  return (key % p) % m;
+}
+
+UniversalHashFunction newUniversalHashFunction (long m) {
+  UniversalHashFunction uhf;
+
+  srand(time(NULL));
+
+  uhf.hf = UHFunction;
+  uhf.m  = m;
+
+  while(!(uhf.p = rand())) ;
+
+  return uhf;
 }

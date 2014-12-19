@@ -3,7 +3,7 @@
 # include <limits.h>
 # include <string.h>
 # include <time.h>
-# include "hashFunctions.h"
+# include "../HashFunctions/hashFunctions.h"
 # include "testing.h"
 
 
@@ -19,6 +19,9 @@ static void stringHashTester(StringHashFunction hfunc, double loadFactor);
 static void runStringKeyTest (int array[], int sz, double loadFactor, StringHashFunction hfunc);
 static void fillStringKeyTable (int array[], int sz, double loadFactor, StringHashFunction hfunc);
 
+static void testUniversalHashingFunctions ();
+static void runUniversalHashTest (UniversalHashFunction uhf, double loadFactor);
+
 static int getCollisionCount(int array[], int sz);
 
 
@@ -27,6 +30,7 @@ int main (void) {
   testSimpleDivisionIntegerHashing();
   testSimpleMultiplicationIntegerHashing();
   testStringHashing();
+  testUniversalHashingFunctions();
   return 0;
 }
 
@@ -81,9 +85,42 @@ void testStringHashing () {
   stringHashTester(bigEndianStringHash, (double)1/(double)8);
 }
 
+static void testUniversalHashingFunctions () {
+  UniversalHashFunction uhf;
+  int trials = 10;
+  int i;
+  long m;
+
+  for (i = 1; i <= trials; ++i) {
+    if (i%2) {
+      m = PRIME_NUMS[i*i * 100 - 1];
+    } else {
+      m = 1 << (i*2);
+      while (m > MAX_M) {
+        m >>= i/3;
+      } 
+    }
+    uhf = newUniversalHashFunction(m);
+    stat_printf("\n___Using UniversalHashFunction %d: m = %ld\n", i, m);
+    stat_printf("-->load factor = 1.\n");
+    runUniversalHashTest(uhf, 1);
+
+    stat_printf("-->load factor = 3/4.\n");
+    runUniversalHashTest(uhf, (double)3/(double)4);
+
+    stat_printf("-->load factor = 1/2.\n");
+    runUniversalHashTest(uhf, (double)1/(double)2);
+
+    stat_printf("-->load factor = 1/4.\n");
+    runUniversalHashTest(uhf, (double)1/(double)4);
+
+    stat_printf("-->load factor = 1/8.\n");
+    runUniversalHashTest(uhf, (double)1/(double)8);
+  }
+}
+
 
 static void intKeyTester(NumericHashFunction hfunc, double loadFactor) {
-
   int arr[MAX_M];
   int sz;
   
@@ -138,14 +175,6 @@ static void runIntKeyTest(int array[], int sz, double loadFactor, NumericHashFun
 }
 
 
-static void fillIntKeyTable(int array[], int sz, double loadFactor, NumericHashFunction hfunc) {
-  int i;
-
-  for (i=1; i <= (int)(sz * loadFactor); ++i) {
-    array[hfunc(INT_MAX/i, sz)] += 1;
-  }       
-}
-
 static void runStringKeyTest(int array[], int sz, double loadFactor, StringHashFunction hfunc) {
   double collisionPercentage;
 
@@ -155,6 +184,31 @@ static void runStringKeyTest(int array[], int sz, double loadFactor, StringHashF
 
   collisionPercentage = (double)getCollisionCount(array, sz) / (double)sz * 100;
   stat_printf("%15d    %.3f\n", sz, collisionPercentage);
+}
+
+
+static void runUniversalHashTest (UniversalHashFunction uhf, double loadFactor) {
+  int *array, i;
+  double collisionPercentage;
+  long m = uhf.m;
+
+  array = calloc (uhf.m, sizeof(int));
+
+  for (i=1; i <= (int)(m * loadFactor); ++i) {
+    array[callUniversalHashFunction(uhf, INT_MAX/i)] += 1;
+  }       
+
+  collisionPercentage = (double)getCollisionCount(array, m) / (double)m * 100;
+  stat_printf("%15ld    %.3f\n", m, collisionPercentage);
+}
+
+
+static void fillIntKeyTable(int array[], int sz, double loadFactor, NumericHashFunction hfunc) {
+  int i;
+
+  for (i=1; i <= (int)(sz * loadFactor); ++i) {
+    array[hfunc(INT_MAX/i, sz)] += 1;
+  }       
 }
 
 

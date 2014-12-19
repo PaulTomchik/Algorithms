@@ -10,7 +10,7 @@ compile_hashFunctions:
 compile_hashing_tests: compile_hashFunctions
 	@gcc -Wall -g -I../HashFunctions hashFunctions.o hashTests.c -o testhashing
 
-compile_hashing_tests_with_stats: compile_hashFunctions
+compile_hashing_tests_wStats: compile_hashFunctions
 	@gcc -Wall -DOUTPUT_STATS -g -I..HashFunctions hashFunctions.o hashTests.c -o testhashing
 
 
